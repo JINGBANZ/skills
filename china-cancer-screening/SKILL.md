@@ -5,6 +5,8 @@ description: Use when deciding which cancer screenings to recommend for a person
 
 # China Cancer Screening Guidelines
 
+> A full **Chinese-language version** of this skill is in [`SKILL.zh.md`](./SKILL.zh.md) — identical content, structure, and numbers, in native clinical Chinese.
+
 ## Overview
 
 This skill distills current (2025–2026) Chinese cancer screening guidance into rules an LLM can apply to a user profile. It answers: **for this person, which cancers warrant a screening recommendation right now, with what test, how often, and how urgently — under China's guidelines?**
@@ -176,3 +178,29 @@ A symptom alert routes to care; it is not a diagnosis. Note for China: dysphagia
 - **No population screen (high-risk only):** thyroid, skin, oral, ovarian, pancreatic, bladder, kidney, endometrial, testicular.
 - **Signature China triggers:** chronic **HBV/HCV** → liver · **H. pylori** + atrophic gastritis → gastric · **high-incidence region** + FDR → esophageal/gastric/nasopharyngeal.
 - **Every red-flag symptom → one action-leading note.** Never drop one.
+
+## Sources
+
+Every rule above is traceable to a named Chinese guideline or national program. Chinese guidelines are published as National Cancer Center (NCC) / CACA documents (in 中华肿瘤杂志 / 中国肿瘤) and as 国家卫健委 (NHC) 方案 — the document name + issuing body + year is the stable citation; public landing pages are linked where they resolve.
+
+**National Cancer Center (NCC) — 国家癌症中心筛查与早诊早治指南:**
+- 《中国肺癌筛查与低剂量螺旋CT指南（2025）》
+- 《中国胃癌筛查与早诊早治指南（2022，北京）》— 中国肿瘤 2022;31(7)
+- 《中国食管癌筛查与早诊早治指南（2022，北京）》— 中华肿瘤杂志 2022;44(6)
+- 《中国结直肠癌筛查与早诊早治指南（2020）》
+- 《中国女性乳腺癌筛查与早诊早治指南（2021，北京）》
+- 《中国前列腺癌筛查与早诊早治指南（2022，北京）》— https://www.caivd-org.cn/m/article.asp?id=12617
+
+**国家卫健委 (NHC) 方案 (2024 版):** 肺癌 / 结直肠癌 / 胃癌 / 食管癌筛查与早诊早治方案（2024年版）; 《原发性肝癌诊疗指南（2024版）》.
+
+**CACA / 中华预防医学会 / 协会共识:**
+- CACA 整合诊治指南 (乳腺癌、肝癌、甲状腺癌等) — 甲状腺癌: 《中国抗癌协会甲状腺癌整合诊治指南（2022）》
+- 《中国女性乳腺癌筛查标准 T/CPMA 014-2020》— 中华预防医学会
+- 《中国子宫颈癌筛查指南（2023）》; 加速消除宫颈癌行动
+
+**National programs:**
+- 城市癌症早诊早治项目 (Cancer Screening Program in Urban China) — https://www.cicams.ac.cn/dzb/news/dong/detail/2256.html
+- 农村高发区早诊早治项目 (esophageal/gastric/liver); 两癌筛查 (cervical + breast, women 35–64)
+- 鼻咽癌 EBV 区域筛查 — 中山大学肿瘤防治中心: http://www.sysucc.org.cn/node/2802
+
+Guideline bodies update periodically (note several have 2024/2025 revisions); re-verify against the named document before relying on a specific age/interval/score cutoff. This skill is decision support, not a substitute for the source guideline or a clinician.

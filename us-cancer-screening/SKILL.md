@@ -193,3 +193,35 @@ A symptom alert is **not** a cancer diagnosis — it's a route-to-care signal. P
 - **Do not screen at average risk:** ovarian, pancreatic, testicular (Grade D); bladder, kidney (no test); skin, oral (I-statement).
 - **Pack-years** drive lung eligibility — always compute from the smoking summary.
 - **Every red-flag symptom → one action-leading note.** Never drop one.
+
+## Sources
+
+Every rule above is traceable to a named guideline. Population screens cite USPSTF (graded) as primary; high-risk surveillance cites the relevant specialty society. Where a journal page blocks direct access, the DOI is the stable citation.
+
+**USPSTF recommendation statements** (current as of 2025–2026):
+- Colorectal, 2021 (A/B) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening
+- Breast, 2024 (B) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/breast-cancer-screening
+- Lung, 2021 (B) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/lung-cancer-screening
+- Cervical, 2025 (A/D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening
+- Prostate, 2018 (C 55–69 / D ≥70) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/prostate-cancer-screening
+- Skin, 2023 (I) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/skin-cancer-screening
+- Oral, 2013/14 (I) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/oral-cancer-screening
+- Ovarian, 2018 (D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/ovarian-cancer-screening
+- Pancreatic, 2019 (D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/pancreatic-cancer-screening
+- Bladder, 2011 (I) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/bladder-cancer-in-adults-screening
+- Testicular, 2011 (D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/testicular-cancer-screening
+
+**American Cancer Society (ACS):**
+- Colorectal screening guideline, 2018 — doi:10.3322/caac.21457
+- Lung cancer screening update, 2023 — doi:10.3322/caac.21811
+- Breast cancer early-detection recommendations — https://www.cancer.org/cancer/types/breast-cancer/screening-tests-and-early-detection/american-cancer-society-recommendations-for-the-early-detection-of-breast-cancer.html
+- Cervical screening update, 2025 — https://pressroom.cancer.org/updated-cervical-cancer-screening-guidelines-2025
+
+**Specialty societies (high-risk surveillance):**
+- ACG colorectal screening, 2021 (high-risk/family-history modifications) — AAFP summary: https://www.aafp.org/pubs/afp/issues/2022/0300/p327.html
+- ACG Barrett's esophagus guideline, 2022 — doi:10.14309/ajg.0000000000001680
+- AASLD HCC practice guidance, *Hepatology* 2023 — doi:10.1097/HEP.0000000000000466
+- AGA clinical practice update, gastric cancer screening/surveillance, 2024 — doi:10.1053/j.gastro.2024.11.001; NCI PDQ: https://www.cancer.gov/types/stomach/hp/stomach-screening-pdq
+- NCCN Genetic/Familial High-Risk Assessment + CAPS consortium (pancreatic high-risk surveillance); ACR/SBI (breast MRI for high-risk + dense breasts); AUA, EAU RCC 2024, ACOG/ASCCP, SGO — per-cancer as cited inline.
+
+Guideline bodies update periodically; re-verify against the linked statement before relying on a specific age/interval in a clinical context. This skill is decision support, not a substitute for the source guideline or a clinician.
