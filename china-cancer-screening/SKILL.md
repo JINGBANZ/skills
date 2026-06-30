@@ -63,11 +63,11 @@ FixYou maps severity to points (high=30, medium=20, low=10):
 ## High-incidence cancers (China screens actively)
 
 ### 肝癌 / Liver (HCC)
-- **高危人群:** chronic liver disease or hereditary risk, **especially males 40–75**, with any of: **HBV and/or HCV infection**, cirrhosis (any cause), heavy alcohol, **MAFLD/fatty liver**, aflatoxin exposure, or family history of liver cancer. **Non-cirrhotic chronic HBV carriers are screened** — this is the defining China difference.
-- **Test / interval:** **腹部超声 (ultrasound) + 血清 AFP every 6 months** minimum. Higher tiers add **AFP-L3 + 异常凝血酶原 (DCP/PIVKA-II)** ("肝癌三联检") and enhanced MRI.
-- **Risk score (aMAP) tiers:** low → annual; medium → q6mo; high → q3–6mo + MRI; extremely high → US+AFP **q3mo** + MRI q6mo.
+- **高危人群:** chronic liver disease or hereditary risk, **especially males >40** (《原发性肝癌诊疗指南 2024》: "尤其年龄＞40岁的男性"; the 2021 早筛 consensus frames the target as males 40–75), with any of: **HBV and/or HCV infection**, cirrhosis (any cause), heavy alcohol, **MAFLD/fatty liver**, aflatoxin B1 exposure, or family history of liver cancer. **Non-cirrhotic chronic HBV carriers are screened** — this is the defining China difference.
+- **Test / interval:** **腹部超声 (ultrasound) + 血清 AFP, at least every 6 months** (诊疗指南 2024). **AFP-L3** and **异常凝血酶原 (DCP/PIVKA-II)** are listed as additional early-detection markers (combined in the GALAD model); enhanced MRI for higher-risk tiers.
+- **Risk stratification:** the **aMAP score is 3-tier** — low (0–50), medium (50–60), high (60–100) (defined in the 诊疗指南). Surveillance **intervals** come from the **2021 中国肝癌早筛策略专家共识 / 二级预防指南**, not aMAP itself: low → annual US+AFP; medium → q6mo; high → q3–6mo (+ MRI q6mo); a separate **极高危 (extremely-high)** category → US+AFP **q3mo** + MRI q6mo.
 - **Profile hook:** `hep_b_c_status` = chronic HBV/HCV is an immediate **high-severity** trigger.
-- **Source:** 《原发性肝癌诊疗指南（2024版）》NHC; CACA. **科室: 肝病科 / 感染科.**
+- **Source:** 《原发性肝癌诊疗指南（2024版）》国家卫健委; 《中国肝癌早筛策略专家共识（2021）》(aMAP tiers + intervals). **科室: 肝病科 / 感染科.**
 
 ### 胃癌 / Gastric
 - **高危人群:** **age ≥45** plus any of: residence in a **gastric-cancer high-incidence region**; **H. pylori infection**; precancerous condition (**chronic atrophic gastritis, gastric intestinal metaplasia, gastric ulcer/polyps, operated stomach, pernicious anemia**); **first-degree relative with gastric cancer**; high-salt/pickled diet, smoking, heavy alcohol.
@@ -83,26 +83,26 @@ FixYou maps severity to points (high=30, medium=20, low=10):
 - **Source:** 《中国食管癌筛查与早诊早治指南（2022）》NCC; NHC 2024 方案. **科室: 消化内科.**
 
 ### 肺癌 / Lung
-- **高危人群:** **age 50–80** with **≥1** of: **smoking ≥20 pack-years** (former smokers eligible if quit **≤5 years** — note China's cutoff is tighter than the U.S. 15y); **passive smoke ≥20 years**; **occupational carcinogen exposure ≥5 years** (radon, arsenic, beryllium, chromium, asbestos, chloromethyl ether, silica, coke-oven/soot — ≥1y if high-intensity); **family history of lung cancer in a 1st/2nd-degree relative PLUS ≥15 pack-years or ≥15y passive smoke**.
-- **Test / interval:** **低剂量螺旋CT (LDCT) annually**; two consecutive negatives → may extend to q2y.
-- **Key China difference:** non-smoking pathways matter (passive smoke, occupational exposure, family history) — China has high never-smoker lung cancer burden, so don't gate solely on personal pack-years.
-- **Source:** 《中国肺癌筛查与低剂量螺旋CT指南（2025）》NCC; NHC 2024 方案. **科室: 呼吸科 / 胸外科.**
+- **高危人群（依据 NHC 2024 方案）:** **age 50–74**, with **≥1** of: **smoking ≥20 pack-years** (including former smokers who **quit <15 years ago**); **passive smoke ≥20 years** (living with a smoker or sharing a workspace); **COPD (慢性阻塞性肺疾病)**; **occupational carcinogen exposure ≥1 year** (asbestos, radon, beryllium, chromium, cadmium, nickel, silica, soot/coal-smoke); **first-degree relative diagnosed with lung cancer** (standalone criterion).
+- **Test / interval:** **低剂量螺旋CT (LDCT) annually** (原则上每年一次). Positive/indeterminate nodules shorten the interval (e.g. ≥6 mm → 3-month recheck).
+- **Key China difference:** non-smoking pathways matter (passive smoke, COPD, occupational exposure, family history) — China has a high never-smoker lung-cancer burden, so don't gate solely on personal pack-years. (The ≥20 pack-year + quit-<15-year threshold itself matches USPSTF.)
+- **Source:** 《肺癌筛查与早诊早治方案（2024年版）》国家卫健委（现行权威方案）. **科室: 呼吸科 / 胸外科.**
 
 ### 结直肠癌 / Colorectal
 - **高危人群 (two pathways):**
-  - **Sporadic:** risk questionnaire scoring age, sex, **FDR with CRC**, smoking, BMI → **≥4 points = high-risk** (a single FDR <60 or ≥2 FDRs scores 4 outright). Screening window **age 40–74** for high-risk individuals.
-  - **Hereditary:** **Lynch syndrome (林奇综合征)** / **FAP (家族性腺瘤性息肉病)** → separate intensive surveillance.
+  - **Sporadic (per NHC 2024 方案):** risk questionnaire scoring age (≤49=0, 50–59=1, ≥60=2), sex (male=1), **FDR with CRC** (=1, but a single FDR <60 OR ≥2 FDRs = 4 outright), smoking (=1), BMI ≥23 (=1) → **cumulative ≥4 points = high-risk**. Screening window **age 40–74**. (The 2020 NCC guideline deliberately sets *no* numeric cutoff — it judges high risk from the same factors qualitatively; the ≥4-point scheme is the 2024 方案's operationalization.)
+  - **Hereditary:** **Lynch syndrome (林奇综合征)** (MLH1/MSH2 → colonoscopy from 20–25, MSH6/PMS2 → from 30–35) / **FAP (家族性腺瘤性息肉病)** (annual colonoscopy from age 10) → separate intensive surveillance.
 - **Test / interval:** **结肠镜 (colonoscopy)** first-line, **q5–10y** (normal → up to 10y); **annual 便潜血 (FIT)**. Alternatives if colonoscopy declined: sigmoidoscopy, CT colonography (结肠CT成像), **multi-target stool DNA (多靶点粪便DNA)**.
 - **Key China difference:** starts at **40** but **only screens questionnaire-identified high-risk people** (risk-gated, not blanket) — reflecting endoscopy capacity.
-- **Source:** 《中国结直肠癌筛查与早诊早治指南（2020）》NCC; NHC 2024 方案. **科室: 消化内科 / 肛肠科.**
+- **Source:** 《结直肠癌筛查与早诊早治方案（2024年版）》国家卫健委 (≥4-point questionnaire, 40–74); 《中国结直肠癌筛查与早诊早治指南（2020）》NCC (tests, hereditary). **科室: 消化内科 / 肛肠科.**
 
 ---
 
 ## Women's-program cancers
 
 ### 乳腺癌 / Breast
-- **一般风险:** women, **start 45, stop 70**; **乳腺X线/钼靶 (mammography) q2y**; **add 超声 (ultrasound)** for dense breasts (common in Chinese women — ultrasound is a co-primary modality, not just adjunct).
-- **高危人群:** FDR with breast/ovarian cancer; ≥2 second-degree relatives with breast/ovarian cancer before 50; **BRCA1/2** carrier; chest radiotherapy before 30; elevated model risk → **start before 40**, **annual mammography + ultrasound q6–12mo**, add **MRI** when indicated.
+- **一般风险:** women, **45–70**, screen **every 1–2 years** (每1～2年). The T/CPMA 014-2020 standard makes **乳腺超声 (ultrasound) the primary modality** (use 乳腺X线/钼靶 mammography only where ultrasound is unavailable); the NCC 2021 guideline recommends **mammography + ultrasound together for dense breasts** (common in Chinese women).
+- **高危人群:** FDR with breast/ovarian cancer; ≥2 second-degree relatives with breast/ovarian cancer before 50; **BRCA1/2** carrier; chest radiotherapy before 30; elevated model risk → **start at 40**, **annual** screening (ultrasound + mammography), add **MRI** when indicated.
 - **National 两癌 program:** clinical exam + ultrasound + mammography for women **35–64**.
 - **Source:** 《中国女性乳腺癌筛查与早诊早治指南（2021）》NCC; CACA. **科室: 乳腺外科 / 乳腺科.**
 
@@ -118,7 +118,7 @@ FixYou maps severity to points (high=30, medium=20, low=10):
 
 ### 前列腺癌 / Prostate
 - **一般风险:** men, **start ~60**, baseline **PSA then q2y** if life expectancy >10y (opportunistic/shared-decision, not a universal program).
-- **高危人群:** FDR with prostate cancer → start PSA at **45**; **BRCA2** carrier → start ~**40**.
+- **高危人群:** age ≥45 with **family history of prostate cancer** (前列腺癌家族史) → start PSA at **45**; **BRCA2** carrier age ≥40 → start ~**40**.
 - **Note:** starts later than the U.S. (lower incidence). **科室: 泌尿外科.** Severity low/medium.
 
 ### 鼻咽癌 / Nasopharyngeal (regionally important — no U.S. analog)
@@ -172,8 +172,8 @@ A symptom alert routes to care; it is not a diagnosis. Note for China: dysphagia
 
 ## Quick reference
 
-- **Actively screened from ~40–45:** liver (HBV/HCV/cirrhosis, US+AFP q6mo), gastric (≥45 + H. pylori/precursor/FDR, gastroscopy by score), esophageal (≥45 + region/FDR/lifestyle, iodine endoscopy), colorectal (≥40, questionnaire ≥4 → colonoscopy/FIT), lung (50–80, ≥20 pack-yr or passive/occupational/family).
-- **Women's program (35–64):** cervical (HPV q5y / TCT q3y, 25–65) + breast (mammography + **ultrasound**, 45–70).
+- **Actively screened from ~40–45:** liver (HBV/HCV/cirrhosis, US+AFP q6mo), gastric (≥45 + H. pylori/precursor/FDR, gastroscopy by score), esophageal (≥45 + region/FDR/lifestyle, iodine endoscopy), colorectal (≥40, questionnaire ≥4 → colonoscopy/FIT), lung (50–74, ≥20 pack-yr/quit<15y, or passive/COPD/occupational/family).
+- **Women's program (35–64):** cervical (HPV q5y / TCT q3y, 25–65) + breast (**ultrasound** ± mammography, 45–70, q1–2y).
 - **Later / opportunistic:** prostate (~60, PSA q2y), nasopharyngeal (endemic-region EBV only).
 - **No population screen (high-risk only):** thyroid, skin, oral, ovarian, pancreatic, bladder, kidney, endometrial, testicular.
 - **Signature China triggers:** chronic **HBV/HCV** → liver · **H. pylori** + atrophic gastritis → gastric · **high-incidence region** + FDR → esophageal/gastric/nasopharyngeal.
@@ -181,26 +181,29 @@ A symptom alert routes to care; it is not a diagnosis. Note for China: dysphagia
 
 ## Sources
 
-Every rule above is traceable to a named Chinese guideline or national program. Chinese guidelines are published as National Cancer Center (NCC) / CACA documents (in 中华肿瘤杂志 / 中国肿瘤) and as 国家卫健委 (NHC) 方案 — the document name + issuing body + year is the stable citation; public landing pages are linked where they resolve.
+Every figure in this skill was **verified against the primary guideline full text** (PDF or journal text), not secondary summaries. Direct PDF links below were downloaded and parsed during authoring; document name + issuing body + year is the durable citation if a link rots.
 
-**National Cancer Center (NCC) — 国家癌症中心筛查与早诊早治指南:**
-- 《中国肺癌筛查与低剂量螺旋CT指南（2025）》
-- 《中国胃癌筛查与早诊早治指南（2022，北京）》— 中国肿瘤 2022;31(7)
-- 《中国食管癌筛查与早诊早治指南（2022，北京）》— 中华肿瘤杂志 2022;44(6)
-- 《中国结直肠癌筛查与早诊早治指南（2020）》
-- 《中国女性乳腺癌筛查与早诊早治指南（2021，北京）》
-- 《中国前列腺癌筛查与早诊早治指南（2022，北京）》— https://www.caivd-org.cn/m/article.asp?id=12617
+**国家卫健委 (NHC) 方案 / 指南 — current operative documents (2024):**
+- 《肺癌筛查与早诊早治方案（2024年版）》— NHC official: https://www.nhc.gov.cn/ylyjs/gzdt/202408/42f43b5f0c4c4ebe90c78ee127959b92.shtml · full text: https://rs.yiigle.com/cmaid/1513141 *(source for lung age 50–74, ≥20 pack-yr/quit<15y, occupational ≥1y, annual LDCT)*
+- 《结直肠癌筛查与早诊早治方案（2024年版）》— PDF: https://jdocn.com/uploads/20241224/7733c5c69f83514903966b236653e4e0.pdf *(source for the ≥4-point questionnaire + 40–74 window)*
+- 《原发性肝癌诊疗指南（2024年版）》— PDF: https://www.nhc.gov.cn/cms-search/downFiles/48cd549a54204ab1a6247e86adb2dea2.pdf *(HBV/HCV high-risk, US+AFP q6mo, aMAP 3-tier)*
 
-**国家卫健委 (NHC) 方案 (2024 版):** 肺癌 / 结直肠癌 / 胃癌 / 食管癌筛查与早诊早治方案（2024年版）; 《原发性肝癌诊疗指南（2024版）》.
+**国家癌症中心 (NCC) — 筛查与早诊早治指南 (verified PDFs):**
+- 《中国胃癌筛查与早诊早治指南（2022，北京）》— 中国肿瘤 2022;31(7) — PDF: https://xadxyylib.yuntsg.com/ueditor/jsp/upload/file/20240322/1711078775085018895.pdf *(≥45; score 0–23; 17–23 yearly / 12–16 q2y / 0–11 q3y)*
+- 《中国食管癌筛查与早诊早治指南（2022，北京）》— 中华肿瘤杂志 2022;44(6), DOI 10.3760/cma.j.cn112152-20220517-00348 — landing: https://rs.yiigle.com/cmaid/1388150 *(≥45; >15/10万; Lugol/NBI; q5y; stop 75)*
+- 《中国结直肠癌筛查与早诊早治指南（2020）》— PDF: http://medi-guide.meditool.cn/ymtpdf/5CDCE3B7-8A2F-13D6-5DDD-0E722DB329CC.pdf *(tests, Lynch/FAP surveillance; sets no numeric cutoff)*
+- 《中国女性乳腺癌筛查与早诊早治指南（2021，北京）》— PDF: http://medi-guide.meditool.cn/ymtpdf/2A8BA412-8F35-7F5A-6E51-8230F7018739.pdf *(general-risk 45, q1–2y; high-risk 40, annual)*
+- 《中国前列腺癌筛查与早诊早治指南（2022，北京）》— 中国肿瘤 2022;31(1) — PDF: https://xadxyylib.yuntsg.com/ueditor/jsp/upload/file/20240322/1711078773586017324.pdf *(start 60, PSA q2y; family hx →45; BRCA2 →40)*
 
-**CACA / 中华预防医学会 / 协会共识:**
-- CACA 整合诊治指南 (乳腺癌、肝癌、甲状腺癌等) — 甲状腺癌: 《中国抗癌协会甲状腺癌整合诊治指南（2022）》
-- 《中国女性乳腺癌筛查标准 T/CPMA 014-2020》— 中华预防医学会
-- 《中国子宫颈癌筛查指南（2023）》; 加速消除宫颈癌行动
+**Consensus / standards / CACA:**
+- 《中国肝癌早筛策略专家共识（2021）》— 肝脏 2021;26(8) — PDF: https://qr.csupress.com.cn/uploadFiles/101/8024/pdf/2-4-3.pdf *(aMAP per-tier surveillance intervals, incl. 极高危 q3mo)*
+- 《中国女性乳腺癌筛查标准 T/CPMA 014-2020》— 中华预防医学会 — PDF: https://www.jhxrmyy.com/upfile/202104/2021041232046333.pdf *(一般风险 45–70; ultrasound primary, mammography fallback)*
+- 《中国子宫颈癌筛查指南（一）（2023）》— 肿瘤综合治疗电子杂志 2023;9(3) *(start 25; HPV q5y / cytology q3y; stop ≥65)*
+- 《中国抗癌协会甲状腺癌整合诊治指南（2022）》— CACA *(no population screening — overdiagnosis concern)*
 
 **National programs:**
-- 城市癌症早诊早治项目 (Cancer Screening Program in Urban China) — https://www.cicams.ac.cn/dzb/news/dong/detail/2256.html
+- 城市癌症早诊早治项目 (Cancer Screening Program in Urban China): https://www.cicams.ac.cn/dzb/news/dong/detail/2256.html
 - 农村高发区早诊早治项目 (esophageal/gastric/liver); 两癌筛查 (cervical + breast, women 35–64)
 - 鼻咽癌 EBV 区域筛查 — 中山大学肿瘤防治中心: http://www.sysucc.org.cn/node/2802
 
-Guideline bodies update periodically (note several have 2024/2025 revisions); re-verify against the named document before relying on a specific age/interval/score cutoff. This skill is decision support, not a substitute for the source guideline or a clinician.
+Guideline bodies update periodically (note the GI cancers now have 2024 NHC 方案 that supersede older expert guidelines — those are cited above as the operative source); re-verify against the named document before relying on a specific age/interval/score cutoff. This skill is decision support, not a substitute for the source guideline or a clinician.
