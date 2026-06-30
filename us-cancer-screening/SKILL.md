@@ -60,11 +60,11 @@ Never assign high on a guideline I-statement (insufficient evidence) alone.
 - **Who:** all adults, **start 45**, continue to **75**. Ages 76–85 individualize (life expectancy >10y); do not screen 86+.
 - **Tests / interval:** colonoscopy **q10y** (preferred) · FIT **annually** · multi-target stool DNA (Cologuard) **q1–3y** · CT colonography **q5y** · flex sig **q5y**. Any positive non-colonoscopy test → colonoscopy.
 - **High-risk escalation (ACG/NCCN):**
-  - 1 first-degree relative (FDR) with CRC/advanced adenoma **<60**, OR ≥2 FDRs any age → **start 40, or 10y before youngest case** (whichever first); **colonoscopy q5y**.
-  - 1 FDR diagnosed **≥60** → start 40, q10y.
-  - **Lynch syndrome** → colonoscopy **q1–2y from age 20–25**. **FAP** → from age 10–12, annually.
-  - **IBD (UC/Crohn colitis)** → colonoscopy 8–10y after onset, then q1–3y.
-- **Source:** USPSTF 2021 (A 50–75, B 45–49). ACS 2018 agrees (start 45).
+  - 1 first-degree relative (FDR) with CRC/advanced polyp **<60**, OR ≥2 FDRs any age → **start 40, or 10y before youngest case** (whichever earlier); **colonoscopy q5y**.
+  - 1 FDR diagnosed **≥60** → start 40 (or 10y before youngest), then **resume average-risk screening** (≈q10y) — not a fixed q5y.
+  - **Lynch syndrome** → colonoscopy **q1–2y from age 20–25** (MLH1 / MSH2 / EPCAM); **MSH6 / PMS2** start later, **30–35, q1–3y**. **FAP** → **from age 10–15, annually**.
+  - **IBD (UC/Crohn colitis)** → colonoscopy **8y after onset**, then q1–3y (with PSC: annually from diagnosis).
+- **Source:** USPSTF 2021 (A 50–75, B 45–49). ACS start 45 — 2018 guideline, reaffirmed in the **2026 update**. High-risk: ACG 2021 / NCCN v1.2024 / ACG IBD 2019.
 - **Department:** Gastroenterology.
 
 ### Breast
@@ -84,9 +84,10 @@ Never assign high on a guideline I-statement (insufficient evidence) alone.
 
 ### Cervical
 - **Who:** women with a cervix. **Start 21** (USPSTF) / **25** (ACS); **stop 65** if adequate prior negative screening. Not after hysterectomy with cervix removed and no high-grade history.
-- **Tests / interval:** 21–29 → cytology **q3y**. 30–65 → **HPV primary q5y** (preferred) · co-test q5y · cytology q3y. Self-collected HPV now accepted.
+- **Tests / interval:** USPSTF 2018 — 21–29 → cytology **q3y**; 30–65 → cytology q3y · **hrHPV q5y** · co-test q5y (no modality ranked "preferred"). ACS prefers **HPV primary testing q5y** across 25–65.
+- **Self-collection:** vaginal self-collected HPV is FDA-cleared (2024) and an accepted option in the **ACS 2025 update**; it is **not** part of the USPSTF 2018 final (a USPSTF update is in draft).
 - **High-risk:** HIV/immunocompromised, in-utero DES, prior CIN2+ → screen more often, continue past 65. **HPV-vaccination status does NOT change the schedule.**
-- **Source:** USPSTF 2025 Grade A; ACS 2025.
+- **Source:** USPSTF 2018 (Grade A; Grade D for <21, >65 with adequate prior screening, and post-hysterectomy); ACS 2020 (updated 2025).
 - **Department:** Gynecology.
 
 ### Prostate
@@ -103,13 +104,13 @@ Never assign high on a guideline I-statement (insufficient evidence) alone.
 Recommend these **only** when the trigger fires. Otherwise omit the cancer (or suggest genetic counseling where a syndrome is implied).
 
 ### Liver (HCC)
-- **Trigger:** **cirrhosis of any cause**, OR **chronic HBV** in a higher-risk subset (Asian male >40, Asian female >50, African ancestry >20, family history of HCC, or PAGE-B ≥10), OR chronic HCV with advanced fibrosis.
-- **Surveillance:** **ultrasound ± AFP every 6 months** (AASLD 2023). AFP ≥20 or any lesion → multiphasic CT/MRI.
+- **Trigger:** **cirrhosis of any cause** (Child-Pugh A–B, or C only if a transplant candidate), OR **chronic HBV** in a higher-risk subset (man from an endemic country >40, woman from an endemic country >50, person of African ancestry at an earlier age — third decade, family history of HCC, or PAGE-B ≥10), OR chronic HCV with advanced fibrosis.
+- **Surveillance:** **ultrasound + AFP every 6 months** (AASLD 2023 — both, in combination). AFP ≥20 or any lesion → multiphasic CT/MRI.
 - **Profile hook:** `hep_b_c_status` = chronic HBV/HCV, or cirrhosis in `past_medical_history`.
 - **Department:** Hepatology. **Severity:** high (active surveillance program).
 
 ### Gastric
-- **Trigger (AGA 2024):** first-generation immigrant from high-incidence region (East Asia, Russia/former USSR, Andean South America), FDR with gastric cancer, or precursor (atrophic gastritis, **gastric intestinal metaplasia**, pernicious anemia), or **CDH1**/Lynch/FAP.
+- **Trigger (AGA 2025 Clinical Practice Update, online Dec 2024):** first-generation immigrant from high-incidence region (East Asia, Russia/former USSR, Andean South America), FDR with gastric cancer, or precursor (atrophic gastritis, **gastric intestinal metaplasia**, pernicious anemia), or **CDH1**/Lynch/FAP.
 - **Surveillance:** upper endoscopy; GIM surveillance ~**q3y**. Test and eradicate **H. pylori**.
 - **Department:** Gastroenterology.
 
@@ -196,32 +197,33 @@ A symptom alert is **not** a cancer diagnosis — it's a route-to-care signal. P
 
 ## Sources
 
-Every rule above is traceable to a named guideline. Population screens cite USPSTF (graded) as primary; high-risk surveillance cites the relevant specialty society. Where a journal page blocks direct access, the DOI is the stable citation.
+USPSTF figures were **verified against the live recommendation pages** (each statement's release date and grade read directly from the source); ACS and specialty-society figures were verified against ACS guideline pages / journal full text. Where a journal page blocks direct access, the DOI is the stable citation.
 
-**USPSTF recommendation statements** (current as of 2025–2026):
-- Colorectal, 2021 (A/B) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening
-- Breast, 2024 (B) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/breast-cancer-screening
-- Lung, 2021 (B) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/lung-cancer-screening
-- Cervical, 2025 (A/D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening
-- Prostate, 2018 (C 55–69 / D ≥70) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/prostate-cancer-screening
-- Skin, 2023 (I) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/skin-cancer-screening
-- Oral, 2013/14 (I) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/oral-cancer-screening
-- Ovarian, 2018 (D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/ovarian-cancer-screening
-- Pancreatic, 2019 (D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/pancreatic-cancer-screening
-- Bladder, 2011 (I) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/bladder-cancer-in-adults-screening
-- Testicular, 2011 (D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/testicular-cancer-screening
+**USPSTF recommendation statements** (release dates verified from the source pages):
+- Colorectal, **2021** (A 50–75 / B 45–49 / C 76–85) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening
+- Breast, **2024** (B 40–74; I for 75+ and dense-breast supplemental) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/breast-cancer-screening
+- Lung, **2021** (B) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/lung-cancer-screening
+- Cervical, **2018** (A; D for <21 / >65 with adequate screening / post-hysterectomy) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/cervical-cancer-screening
+- Prostate, **2018** (C 55–69 / D ≥70) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/prostate-cancer-screening
+- Skin, **2023** (I) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/skin-cancer-screening
+- Oral, **2013** (I) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/oral-cancer-screening
+- Ovarian, **2018** (D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/ovarian-cancer-screening
+- Pancreatic, **2019** (D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/pancreatic-cancer-screening
+- Bladder, **2011** (I) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/bladder-cancer-in-adults-screening
+- Testicular, **2011** (D) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/testicular-cancer-screening
 
 **American Cancer Society (ACS):**
-- Colorectal screening guideline, 2018 — doi:10.3322/caac.21457
-- Lung cancer screening update, 2023 — doi:10.3322/caac.21811
-- Breast cancer early-detection recommendations — https://www.cancer.org/cancer/types/breast-cancer/screening-tests-and-early-detection/american-cancer-society-recommendations-for-the-early-detection-of-breast-cancer.html
-- Cervical screening update, 2025 — https://pressroom.cancer.org/updated-cervical-cancer-screening-guidelines-2025
+- Colorectal screening guideline, 2018 (doi:10.3322/caac.21457), **reaffirmed in the 2026 update** (doi:10.3322/caac.70083; start 45 reaffirmed)
+- Lung cancer screening update, 2023 — doi:10.3322/caac.21811 (eliminated the years-since-quitting limit)
+- Breast cancer early-detection recommendations, 2015 — https://www.cancer.org/cancer/types/breast-cancer/screening-tests-and-early-detection/american-cancer-society-recommendations-for-the-early-detection-of-breast-cancer.html
+- Cervical, 2020 (doi:10.3322/caac.21628) **updated 2025** (self-collection added) — https://pressroom.cancer.org/updated-cervical-cancer-screening-guidelines-2025
 
 **Specialty societies (high-risk surveillance):**
-- ACG colorectal screening, 2021 (high-risk/family-history modifications) — AAFP summary: https://www.aafp.org/pubs/afp/issues/2022/0300/p327.html
+- ACG colorectal screening, 2021 (Shaukat et al., *Am J Gastroenterol* 116:458) — AAFP summary: https://www.aafp.org/pubs/afp/issues/2022/0300/p327.html
+- NCCN Genetic/Familial High-Risk Assessment (Lynch / FAP start ages, BRCA breast MRI 25/30), v1.2024–v1.2025; ACG IBD surveillance 2019 (*Am J Gastroenterol* 114:384, start 8y after onset)
 - ACG Barrett's esophagus guideline, 2022 — doi:10.14309/ajg.0000000000001680
-- AASLD HCC practice guidance, *Hepatology* 2023 — doi:10.1097/HEP.0000000000000466
-- AGA clinical practice update, gastric cancer screening/surveillance, 2024 — doi:10.1053/j.gastro.2024.11.001; NCI PDQ: https://www.cancer.gov/types/stomach/hp/stomach-screening-pdq
-- NCCN Genetic/Familial High-Risk Assessment + CAPS consortium (pancreatic high-risk surveillance); ACR/SBI (breast MRI for high-risk + dense breasts); AUA, EAU RCC 2024, ACOG/ASCCP, SGO — per-cancer as cited inline.
+- AASLD HCC practice guidance, *Hepatology* 2023;78:1922 — doi:10.1097/HEP.0000000000000466 (ultrasound **and** AFP q6mo; eligibility Table 1)
+- AGA clinical practice update, gastric (Shah et al., *Gastroenterology* **2025**;168:405, online Dec 2024) — https://pubmed.ncbi.nlm.nih.gov/39718517/; NCI PDQ: https://www.cancer.gov/types/stomach/hp/stomach-screening-pdq
+- CAPS consortium 2020 (*Gut* 69:7) + NCCN (pancreatic high-risk start ages); ACR/SBI (breast MRI / dense breasts); AUA, EAU RCC 2024, ACOG/ASCCP, SGO — per-cancer as cited inline.
 
 Guideline bodies update periodically; re-verify against the linked statement before relying on a specific age/interval in a clinical context. This skill is decision support, not a substitute for the source guideline or a clinician.
