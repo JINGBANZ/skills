@@ -187,7 +187,3 @@ A symptom alert routes to care; it is not a diagnosis. Note for China: dysphagia
 - **No population screen (high-risk only):** thyroid, skin, oral, ovarian, pancreatic, bladder, kidney, endometrial, testicular.
 - **Signature China triggers:** chronic **HBV/HCV** → liver · **H. pylori** + atrophic gastritis → gastric · **high-incidence region** + FDR → esophageal/gastric/nasopharyngeal.
 - **Every red-flag symptom → one action-leading note.** Never drop one.
-
-## Sources
-
-Full guideline citations, verified source PDFs, and per-figure provenance: see [SOURCES.md](./SOURCES.md) — reference only, not needed at decision time. This skill is decision support, not a substitute for the source guideline or a clinician.

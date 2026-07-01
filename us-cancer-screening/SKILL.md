@@ -199,7 +199,3 @@ A symptom alert is **not** a cancer diagnosis — it's a route-to-care signal. P
 - **Do not screen at average risk:** ovarian, pancreatic, testicular (Grade D); bladder, kidney (no test); skin, oral (I-statement).
 - **Pack-years** drive lung eligibility — always compute from the smoking summary.
 - **Every red-flag symptom → one action-leading note.** Never drop one.
-
-## Sources
-
-Full guideline citations, verified source PDFs, and per-figure provenance: see [SOURCES.md](./SOURCES.md) — reference only, not needed at decision time. This skill is decision support, not a substitute for the source guideline or a clinician.
