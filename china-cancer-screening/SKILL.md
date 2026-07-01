@@ -5,8 +5,6 @@ description: Use when deciding which cancer screenings to recommend for a person
 
 # China Cancer Screening Guidelines
 
-> A full **Chinese-language version** of this skill is in [`SKILL.zh.md`](./SKILL.zh.md) — identical content, structure, and numbers, in native clinical Chinese.
-
 ## Overview
 
 This skill distills current (2025–2026) Chinese cancer screening guidance into rules an LLM can apply to a user profile. It answers: **for this person, which cancers warrant a screening recommendation right now, with what test, how often, and how urgently — under China's guidelines?**
