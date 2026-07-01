@@ -36,7 +36,7 @@ This skill distills current (2025–2026) Chinese cancer screening guidance into
 | `red_flag_symptoms` | never drop — every one gets a safety note |
 | `hpv_vaccinated`, `last_pap_result` | cervical history |
 | `hrt`, `parity`, `ever_breastfed`, `menopause_status` | breast/endometrial reproductive context |
-| **region / origin** (if known) | residence in a **high-incidence area** is a formal trigger for esophageal/gastric/nasopharyngeal — infer from `occupational_exposure`/free-text if present; otherwise treat as unknown |
+| **region / origin** (if known) | residence in a **high-incidence area** is a formal trigger for esophageal/gastric/nasopharyngeal — read it **only** from an explicit residence/free-text statement; do NOT infer it from unrelated fields. If unstated, treat as unknown and note esophageal/gastric/nasopharyngeal can't be fully assessed |
 
 If a field is declined/unknown, don't assume — recommend on what's known and note the gap. **HBV/HCV status, H. pylori, and family history are the highest-yield fields** in the Chinese framework; flag them when missing.
 
@@ -44,24 +44,31 @@ If a field is declined/unknown, don't assume — recommend on what's known and n
 
 1. **Check infection + family-history triggers first** (HBV/HCV → liver; H. pylori/precursors/FDR → gastric; FDR → colorectal/esophageal). These drive Chinese screening more than age.
 2. **Apply the 高危人群 definition** for each cancer; if met, recommend the targeted screen.
-3. **Apply numeric risk scores** where they exist (gastric score, colorectal questionnaire, liver aMAP tier) to set interval.
-4. **Apply the women's program** (cervical + breast) by age.
+3. **Apply numeric risk scores where the inputs exist.** The gastric score (needs pepsinogen / gastrin-17 / H. pylori serology) and liver aMAP (needs albumin / bilirubin / platelets) rely on **labs the profile does not collect** — do not compute or fabricate them; absent the labs, drive the recommendation from the qualitative 高危人群 definition and flag the missing labs as high-yield. The colorectal questionnaire uses only profile fields (age, sex, FDR, smoking, BMI) and **is** computable.
+4. **Apply the women's-program cancers** (cervical, breast) by their 一般风险 / 高危人群 age gates.
 5. **Handle every red-flag symptom** with an action-leading note.
 6. **Assign severity** and a **department** (科室).
 
 ## Severity mapping
 
-FixYou maps severity to points (high=30, medium=20, low=10):
-- **high** — person clearly meets a 高危人群 definition with an active program (HBV carrier → liver; H. pylori + atrophic gastritis → gastric; high gastric score; FDR with GI cancer pulling start age in) AND screening is due.
-- **medium** — standard program screening that applies by age (e.g., woman 45–70 for breast; adult in colorectal high-risk questionnaire range).
-- **low** — borderline / shared-decision (prostate PSA; approaching but below high-risk threshold; thyroid where China stays neutral).
+Severity is a *per-person urgency* the advisor assigns (it feeds FixYou's shield score) — **not** a guideline grade. Assign:
+- **high** — person clearly meets a 高危人群 definition with an active program (HBV carrier → liver; H. pylori + atrophic gastritis → gastric; high gastric score; **FDR with a GI cancer** — a standalone 高危人群 qualifier, though screening still starts at each cancer's own age gate, e.g. ≥45 for gastric/esophageal) AND screening is due.
+- **medium** — standard program screening that applies by age at average risk (e.g., woman 45–70 for breast).
+- **low** — borderline / shared-decision (prostate PSA; person approaching but below a high-risk threshold).
+
+Colorectal in China is recommended **only** for questionnaire-identified 高危人群 (score ≥4), so a colorectal recommendation is always **high** — there is no average-risk colorectal tier for "medium" to apply to.
+
+## Writing the output fields
+
+- **`screening_name`** — the single first-line/preferred test for this person's tier, formatted *modality (interval)* in the user's locale — e.g. "结肠镜（每5–10年）", "低剂量螺旋CT（每年）". When tests are co-equal, use the first-line one and mention alternatives in `summary`.
+- **`summary`** — plain language for a layperson, 1–2 sentences: the profile fact that triggered the recommendation + what the test is. Do **not** include guideline names, risk-score numbers, or citations.
 
 ---
 
 ## High-incidence cancers (China screens actively)
 
 ### 肝癌 / Liver (HCC)
-- **高危人群:** chronic liver disease or hereditary risk, **especially males >40** (《原发性肝癌诊疗指南 2024》: "尤其年龄＞40岁的男性"; the 2021 早筛 consensus frames the target as males 40–75), with any of: **HBV and/or HCV infection**, cirrhosis (any cause), heavy alcohol, **MAFLD/fatty liver**, aflatoxin B1 exposure, or family history of liver cancer. **Non-cirrhotic chronic HBV carriers are screened** — this is the defining China difference.
+- **高危人群:** chronic liver disease or hereditary risk, **especially males >40** (the 2021 早筛 consensus frames the target as males 40–75), with any of: **HBV and/or HCV infection**, cirrhosis (any cause), heavy alcohol, **MAFLD/fatty liver**, aflatoxin B1 exposure, or family history of liver cancer. **Non-cirrhotic chronic HBV carriers are screened** — this is the defining China difference.
 - **Test / interval:** **腹部超声 (ultrasound) + 血清 AFP, at least every 6 months** (诊疗指南 2024). **AFP-L3** and **异常凝血酶原 (DCP/PIVKA-II)** are listed as additional early-detection markers (combined in the GALAD model); enhanced MRI for higher-risk tiers.
 - **Risk stratification:** the **aMAP score is 3-tier** — low (0–50), medium (50–60), high (60–100) (defined in the 诊疗指南). Surveillance **intervals** come from the **2021 中国肝癌早筛策略专家共识 / 二级预防指南**, not aMAP itself: low → annual US+AFP; medium → q6mo; high → q3–6mo (+ MRI q6mo); a separate **极高危 (extremely-high)** category → US+AFP **q3mo** + MRI q6mo.
 - **Profile hook:** `hep_b_c_status` = chronic HBV/HCV is an immediate **high-severity** trigger.
@@ -88,7 +95,7 @@ FixYou maps severity to points (high=30, medium=20, low=10):
 
 ### 结直肠癌 / Colorectal
 - **高危人群 (two pathways):**
-  - **Sporadic (per NHC 2024 方案):** risk questionnaire scoring age (≤49=0, 50–59=1, ≥60=2), sex (male=1), **FDR with CRC** (=1, but a single FDR <60 OR ≥2 FDRs = 4 outright), smoking (=1), BMI ≥23 (=1) → **cumulative ≥4 points = high-risk**. Screening window **age 40–74**. (The 2020 NCC guideline deliberately sets *no* numeric cutoff — it judges high risk from the same factors qualitatively; the ≥4-point scheme is the 2024 方案's operationalization.)
+  - **Sporadic (per NHC 2024 方案):** risk questionnaire scoring age (≤49=0, 50–59=1, ≥60=2), sex (male=1), **FDR with CRC** (=1, but a single FDR <60 OR ≥2 FDRs = 4 outright), smoking (=1), BMI ≥23 (=1) → **cumulative ≥4 points = high-risk**. Screening window **age 40–74**.
   - **Hereditary:** **Lynch syndrome (林奇综合征)** (MLH1/MSH2 → colonoscopy from 20–25, MSH6/PMS2 → from 30–35) / **FAP (家族性腺瘤性息肉病)** (annual colonoscopy from age 10) → separate intensive surveillance.
 - **Test / interval:** **结肠镜 (colonoscopy)** first-line, **q5–10y** (normal → up to 10y); **annual 便潜血 (FIT)**. Alternatives if colonoscopy declined: sigmoidoscopy, CT colonography (结肠CT成像), **multi-target stool DNA (多靶点粪便DNA)**.
 - **Key China difference:** starts at **40** but **only screens questionnaire-identified high-risk people** (risk-gated, not blanket) — reflecting endoscopy capacity.
@@ -102,6 +109,7 @@ FixYou maps severity to points (high=30, medium=20, low=10):
 - **一般风险:** women, **45–70**, screen **every 1–2 years** (每1～2年). The T/CPMA 014-2020 standard makes **乳腺超声 (ultrasound) the primary modality** (use 乳腺X线/钼靶 mammography only where ultrasound is unavailable); the NCC 2021 guideline recommends **mammography + ultrasound together for dense breasts** (common in Chinese women).
 - **高危人群:** FDR with breast/ovarian cancer; ≥2 second-degree relatives with breast/ovarian cancer before 50; **BRCA1/2** carrier; chest radiotherapy before 30; elevated model risk → **start at 40**, **annual** screening (ultrasound + mammography), add **MRI** when indicated.
 - **National 两癌 program:** clinical exam + ultrasound + mammography for women **35–64**.
+- **Recommendation gate:** default start is 一般风险 **45–70** (or 高危人群 → **40**); treat the 35–64 两癌 program as an earlier-access option to *mention*, not the default start.
 - **Source:** 《中国女性乳腺癌筛查与早诊早治指南（2021）》NCC; CACA. **科室: 乳腺外科 / 乳腺科.**
 
 ### 宫颈癌 / Cervical
@@ -122,11 +130,13 @@ FixYou maps severity to points (high=30, medium=20, low=10):
 ### 鼻咽癌 / Nasopharyngeal (regionally important — no U.S. analog)
 - **高危人群:** residents of **endemic southern China** (广东/广西/福建/湖南/海南), age ~30–69, esp. with family history or EBV high-risk markers.
 - **Test:** **EBV serology (VCA-IgA / EBNA1-IgA) and/or plasma EBV-DNA**; positive → 鼻咽镜 (nasopharyngoscopy) + head/neck MRI. Typically annual in high-risk cohorts.
+- **No canonical `cancer_type` id** — never emit nasopharyngeal as a recommendation's `cancer_type`. When its regional/family trigger fires, surface it via a `symptom_alert` or in another recommendation's `summary` (recommend EBV serology, route to 耳鼻喉科).
 - **Source:** NCC / 中山大学肿瘤防治中心 regional programs. **科室: 耳鼻喉科 / 头颈外科.** Only recommend with a regional/family trigger.
 
 ### 甲状腺癌 / Thyroid
 - **无人群筛查推荐 / No population screening** — China stays neutral due to **overdiagnosis (过度诊断)** concerns (rising incidence, flat mortality). Aligns with U.S. (against screening asymptomatic adults).
 - **High-risk only:** childhood/neck radiation, family history / hereditary syndrome (MEN2, RET, FAP), or a known nodule → neck ultrasound + **TI-RADS**; suspicious → FNAB. **科室: 甲状腺外科 / 内分泌科.**
+- **No canonical `cancer_type` id** and no population screening — effectively never emitted as a recommendation; mention in prose only if a high-risk trigger fires.
 
 ### Cancers with no China population screening (高危/surveillance only)
 For all of these: **无人群筛查推荐** — recommend only on a clear high-risk trigger; otherwise route to symptom awareness.
@@ -164,7 +174,8 @@ A symptom alert routes to care; it is not a diagnosis. Note for China: dysphagia
 - Lead with **高危人群 status**: in China, "do they meet the high-risk definition?" drives the recommendation more than age. Flag missing high-yield fields (**HBV/HCV, H. pylori, family history, region**).
 - **Screen HBV/HCV carriers for liver and H. pylori/precursor carriers for gastric** — these are the signature Chinese screens; don't omit them by applying U.S. instincts.
 - Prefer **ultrasound** as a real screening modality (liver, breast-dense, thyroid-nodule) — it's central to Chinese practice, not just adjunct.
-- Don't push screening China doesn't recommend at population level (thyroid, ovarian, pancreatic, skin, oral, bladder, kidney, testicular, endometrial) — require a high-risk trigger.
+- Don't push screening China doesn't recommend at population level — require a high-risk trigger (see Quick reference for the list).
+- **Only emit a `cancer_type` from the 16 canonical ids.** Nasopharyngeal and thyroid are **not** in that set — never emit them as `cancer_type`; surface nasopharyngeal via a `symptom_alert`/prose when its trigger fires.
 - Don't invent region, infection, or family history not in the profile. When region is unknown, note that high-incidence-area cancers (esophageal/gastric/nasopharyngeal) may need refinement.
 - Distinguish **screening** (asymptomatic) from **diagnostic workup** (symptomatic).
 
@@ -179,7 +190,7 @@ A symptom alert routes to care; it is not a diagnosis. Note for China: dysphagia
 
 ## Sources
 
-Every figure in this skill was **verified against the primary guideline full text** (PDF or journal text), not secondary summaries. Direct PDF links below were downloaded and parsed during authoring; document name + issuing body + year is the durable citation if a link rots.
+Direct PDF / full-text links below; document name + issuing body + year is the durable citation if a link rots.
 
 **国家卫健委 (NHC) 方案 / 指南 — current operative documents (2024):**
 - 《肺癌筛查与早诊早治方案（2024年版）》— NHC official: https://www.nhc.gov.cn/ylyjs/gzdt/202408/42f43b5f0c4c4ebe90c78ee127959b92.shtml · full text: https://rs.yiigle.com/cmaid/1513141 *(source for lung age 50–74, ≥20 pack-yr/quit<15y, occupational ≥1y, annual LDCT)*

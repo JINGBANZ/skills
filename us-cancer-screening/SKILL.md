@@ -22,7 +22,7 @@ These rules key on fields a health intake collects. Map whatever profile you're 
 | `age`, `biological_sex` | gate nearly every recommendation |
 | `smoking` | status (never/former/current) **and pack-years**; for former, years since quit |
 | `alcohol` | heavy use (≳3 drinks/day or ≳7–14/week) is a risk modifier |
-| BMI (`height` + `weight`) | overweight ≥25, obese ≥30 — modifier for several cancers |
+| `BMI` | overweight ≥25, obese ≥30 — modifier for several cancers |
 | `family_cancer_history` | per relative: **which cancer, which relative (degree), age at diagnosis**. First-degree = parent/sibling/child |
 | `past_medical_history` | IBD, cirrhosis, Barrett's, polyps, pernicious anemia, prior cancer, transplant/immunosuppression, known genetic syndrome |
 | `hep_b_c_status` | chronic HBV or HCV → liver surveillance trigger |
@@ -44,13 +44,18 @@ If a needed field was **declined or unknown**, do not assume a value — make th
 
 ## Severity mapping
 
-FixYou translates severity to shield points (high=30, medium=20, low=10). Assign:
+Severity is a *per-person urgency* the advisor assigns (it feeds FixYou's shield score) — **not** a guideline grade. Assign:
 
-- **high** — strong guideline (USPSTF A/B) screening that is **due now** AND the person carries elevated personal risk (smoking meeting lung criteria, first-degree family history pulling start age in, known precursor lesion or genetic syndrome). Also any **overdue** standard screen.
-- **medium** — standard population screening that applies now at average risk (e.g., a 46-year-old, no CRC screen yet).
+- **high** — a strong population screen (USPSTF A/B) that applies now AND the person carries elevated personal risk (smoking meeting lung criteria, first-degree family history pulling the start age in, a known precursor lesion or genetic syndrome); OR **active high-risk surveillance** triggered by cirrhosis / chronic HBV/HCV, a precursor lesion (GIM, Barrett's), or a genetic syndrome — this is disease monitoring, so the I/D-grade caveat doesn't apply.
+- **medium** — a standard population screen that applies now at average risk (e.g., a 46-year-old at average CRC risk). Absent any screening-history dates, in-window average-risk screens default here.
 - **low** — shared-decision / borderline (prostate PSA 55–69; person approaching but not yet at start age; optional add-on).
 
-Never assign high on a guideline I-statement (insufficient evidence) alone.
+The profile carries no last-screening date except `last_pap_result`, so do **not** infer "overdue" for other cancers; only cervical can be flagged overdue (a `last_pap_result` older than the interval). Never assign high on a guideline I-statement (insufficient evidence) alone.
+
+## Writing the output fields
+
+- **`screening_name`** — the single first-line/preferred test for this person's risk tier, formatted *modality (interval)* — e.g. "Colonoscopy (every 10 years)", "Low-dose CT (annual)". When tests are co-equal, use the `(preferred)`-marked one and mention alternatives in `summary`.
+- **`summary`** — plain language for a layperson, 1–2 sentences: the profile fact that triggered the recommendation + what the test is. Do **not** include guideline grades, risk-score numbers, or citations/DOIs.
 
 ---
 
@@ -99,9 +104,9 @@ Never assign high on a guideline I-statement (insufficient evidence) alone.
 
 ---
 
-## High-risk-only surveillance (no average-risk population screen)
+## No average-risk population screen (high-risk surveillance, or awareness-only for some)
 
-Recommend these **only** when the trigger fires. Otherwise omit the cancer (or suggest genetic counseling where a syndrome is implied).
+Recommend these **only** when the trigger fires. Otherwise omit the cancer (or suggest genetic counseling where a syndrome is implied). A few (bladder, testicular) have **no surveillance test even at high risk** — route to symptom-awareness/workup instead.
 
 ### Liver (HCC)
 - **Trigger:** **cirrhosis of any cause** (Child-Pugh A–B, or C only if a transplant candidate), OR **chronic HBV** in a higher-risk subset (man from an endemic country >40, woman from an endemic country >50, person of African ancestry at an earlier age — third decade, family history of HCC, or PAGE-B ≥10), OR chronic HCV with advanced fibrosis.
@@ -110,7 +115,7 @@ Recommend these **only** when the trigger fires. Otherwise omit the cancer (or s
 - **Department:** Hepatology. **Severity:** high (active surveillance program).
 
 ### Gastric
-- **Trigger (AGA 2025 Clinical Practice Update, online Dec 2024):** first-generation immigrant from high-incidence region (East Asia, Russia/former USSR, Andean South America), FDR with gastric cancer, or precursor (atrophic gastritis, **gastric intestinal metaplasia**, pernicious anemia), or **CDH1**/Lynch/FAP.
+- **Trigger (AGA 2025):** first-generation immigrant from high-incidence region (East Asia, Russia/former USSR, Andean South America), FDR with gastric cancer, or precursor (atrophic gastritis, **gastric intestinal metaplasia**, pernicious anemia), or **CDH1**/Lynch/FAP.
 - **Surveillance:** upper endoscopy; GIM surveillance ~**q3y**. Test and eradicate **H. pylori**.
 - **Department:** Gastroenterology.
 
@@ -190,16 +195,16 @@ A symptom alert is **not** a cancer diagnosis — it's a route-to-care signal. P
 ## Quick reference
 
 - **Population screens:** colorectal (45–75), breast (40–74), lung (50–80 if ≥20 pack-yr & current/quit ≤15y), cervical (21/25–65), prostate (55–69 shared decision).
-- **High-risk-only:** liver (HBV/HCV/cirrhosis), gastric (precursor/immigrant/FDR), esophageal (GERD+risk), pancreatic·ovarian·endometrial (BRCA/Lynch), skin·oral (risk-factor surveillance).
+- **High-risk-only:** liver (HBV/HCV/cirrhosis), gastric (precursor/immigrant/FDR), esophageal (GERD+risk), ovarian (BRCA/Lynch), endometrial (Lynch), pancreatic (familial / BRCA2·PALB2·ATM · Lynch · Peutz-Jeghers), skin·oral (risk-factor surveillance).
 - **Do not screen at average risk:** ovarian, pancreatic, testicular (Grade D); bladder, kidney (no test); skin, oral (I-statement).
 - **Pack-years** drive lung eligibility — always compute from the smoking summary.
 - **Every red-flag symptom → one action-leading note.** Never drop one.
 
 ## Sources
 
-USPSTF figures were **verified against the live recommendation pages** (each statement's release date and grade read directly from the source); ACS and specialty-society figures were verified against ACS guideline pages / journal full text. Where a journal page blocks direct access, the DOI is the stable citation.
+Each rule traces to a named guideline; USPSTF is primary for population screens, specialty societies for high-risk surveillance.
 
-**USPSTF recommendation statements** (release dates verified from the source pages):
+**USPSTF recommendation statements:**
 - Colorectal, **2021** (A 50–75 / B 45–49 / C 76–85) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening
 - Breast, **2024** (B 40–74; I for 75+ and dense-breast supplemental) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/breast-cancer-screening
 - Lung, **2021** (B) — https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/lung-cancer-screening
