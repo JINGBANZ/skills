@@ -1,4 +1,0 @@
-interface:
-  display_name: "Design Review Gate"
-  short_description: "Scope-first, invariant-driven design reviews"
-  default_prompt: "Use $design-review-gate to make this design implementation-ready without expanding its agreed scope."
