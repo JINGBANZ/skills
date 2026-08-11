@@ -1,4 +1,4 @@
 interface:
   display_name: "Scope-First Design"
   short_description: "Scope-first design and implementation handoff"
-  default_prompt: "Use $scope-first-design to create a bounded, risk-proportional design, implementation handoff, and scoped PR."
+  default_prompt: "Use $scope-first-design to bound an ambiguous or high-impact change, create a risk-proportional design, and prepare the next implementation slice."

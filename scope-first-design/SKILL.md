@@ -10,6 +10,11 @@ bounded implementation slice. Treat implementation-ready as: a fresh agent can
 complete that slice autonomously until it reaches an explicit owner gate. Do not
 pre-specify the whole future product.
 
+Do not expand an already bounded, reversible change into a design exercise when
+it does not alter architecture, sensitive effects, accepted risk, owner policy,
+or cross-component contracts. Inherit the repository's scope contract and
+proceed with the smallest verified implementation.
+
 Produce four logical outputs:
 
 1. Scope contract.
@@ -43,7 +48,7 @@ Use this discovery bank selectively. Do not ask every question every time.
 | --- | --- |
 | Outcome and people | What outcome matters, and who is the target user or operator? |
 | Phase boundary | Where does this phase end, and what exact slice should implementation complete next? |
-| Capabilities | What must work now, and what are the explicit non-goals? |
+| Capabilities | What must work in this phase, what belongs to later slices, and what is outside the phase? |
 | Operating assumptions | Where will it run, at what scale, under which trust and access model? |
 | Sensitive effects | What data, credentials, money, external writes, or compliance duties are involved? |
 | Failure tolerance | What downtime, data loss, partial failure, and recovery behavior are acceptable? |
@@ -81,7 +86,7 @@ Create or update the **scope contract**:
 | --- | --- |
 | Objective and actors | User-visible outcome and target user/operator |
 | Required capabilities | Behaviors that must exist in this phase |
-| Explicit non-goals | Plausible features intentionally excluded |
+| Explicit non-goals | Work explicitly outside the current phase |
 | Operating assumptions | Deployment, scale, trust, access, and data sensitivity |
 | Known facts | Decisions and constraints with canonical evidence |
 | Safe assumptions | Reversible defaults, consequences, and validation points |
@@ -90,14 +95,25 @@ Create or update the **scope contract**:
 | Next slice | Concrete start and end boundary for implementation |
 | Acceptance | Measurable completion criteria for the phase and next slice |
 
+A capability assigned to a later slice remains part of the current phase
+contract. Mark it **not in this slice**. Reserve **non-goal** for work outside the
+current phase.
+
 Do not invent an owner-only business value. Ask when it blocks safe design;
 otherwise record a named owner gate so implementation can progress up to that
 point. Freeze the contract before detailed design. Route later scope changes
 through an explicit owner decision.
 
-Never add deferred infrastructure merely because it is a generic industry best
-practice. First name the in-scope requirement or risk that demands it. Prefer
-removing an unnecessary feature over fully designing it.
+Never add out-of-phase infrastructure merely because it is a generic industry
+best practice. First name the in-scope requirement or risk that demands it.
+Prefer removing an unnecessary feature over fully designing it.
+
+Review feedback is evidence, not a new specification. Correct confirmed
+violations of the frozen scope contract or applicable safety, security, and
+privacy constraints. Treat feedback that changes required behavior, accepted
+risk, phase non-goals, or materially introduces lifecycle states, retry/timer
+semantics, or cross-component coordination as a scope proposal requiring owner
+approval.
 
 ## 4. Construct the smallest viable design
 
@@ -140,12 +156,14 @@ locations, and verification evidence. Do not create an invariant checklist for
 ordinary details.
 
 Keep each fact in one canonical place and link to it elsewhere. Do not specify
-internal contracts for non-goals or deferred components.
+internal contracts for phase non-goals. Specify a later-slice component only as
+far as its current interface or dependency requires.
 
 ## 5. Slice the work and prepare the handoff
 
 Decompose the design into ordered vertical slices that produce verifiable value.
-Minimize cross-slice scaffolding and postpone deferred capabilities.
+Minimize cross-slice scaffolding. Keep later-slice capabilities in the phase
+contract while excluding them from the immediate handoff.
 
 Create the **implementation plan and next-slice handoff**:
 
@@ -154,7 +172,8 @@ Create the **implementation plan and next-slice handoff**:
 
 For the immediate slice, state:
 
-- Goal and explicit non-goals.
+- Goal, capabilities in this slice, phase capabilities marked **not in this
+  slice**, and phase non-goals.
 - Files, components, and canonical design sections in scope.
 - Preconditions, inputs, outputs, and dependencies.
 - Risk-relevant decisions and invariants that must remain true.
@@ -171,7 +190,8 @@ Validate in proportion to the selected rigor level:
 
 - Map every required capability to a design decision, implementation slice, and
   acceptance criterion.
-- Confirm that non-goals did not enter components, contracts, or planned work.
+- Confirm that phase non-goals did not enter components, contracts, or planned
+  work.
 - Confirm that every material assumption is recorded or converted to an owner
   gate.
 - Check only relevant interfaces, data paths, lifecycles, failure paths,
@@ -206,9 +226,9 @@ canonical design changes and open or update one scoped design PR. Use this body:
 ```
 
 Summarize and link to canonical design sections instead of duplicating the full
-specification. Keep deferred ideas out of the executable scope. If scope changes,
-update the canonical scope contract and PR summary first, then change low-level
-details.
+specification. Keep phase non-goals out of executable scope and mark later-slice
+capabilities **not in this slice**. If scope changes, update the canonical scope
+contract and PR summary first, then change low-level details.
 
 End with:
 
