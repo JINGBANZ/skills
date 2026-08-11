@@ -1,4 +1,0 @@
-interface:
-  display_name: "Design Workflow Gate"
-  short_description: "Scope-first design, handoff, and review workflow"
-  default_prompt: "Use $design-workflow-gate to turn this project into a bounded, implementation-ready design and handoff."
