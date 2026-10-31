@@ -13,7 +13,7 @@ Create a self-contained UTF-8 HTML file with embedded styles, scripts, and image
 as needed. Use example data, never real credentials. Check the rendered design
 when a browser or renderer is available; publishing verifies delivery, not appearance.
 
-Choose a descriptive lowercase task name such as `jarvis-connections`. Create
+Choose a descriptive lowercase task name such as `pricing-page-redesign`. Create
 one directory per task, then reuse that name throughout revisions of the task.
 Do not reuse another task's directory. A name collision requires a more specific
 readable name, not a random suffix.
@@ -21,7 +21,7 @@ readable name, not a random suffix.
 Run the configured publisher with Python 3 (quote all paths):
 
 ```bash
-python3 /path/from/config/publish.py --new --task jarvis-connections /path/to/preview.html
+python3 /path/from/config/publish.py --new --task pricing-page-redesign /path/to/preview.html
 ```
 
 For revisions, omit `--new` and keep the same task name. The publisher preserves

@@ -1,8 +1,10 @@
 import concurrent.futures
 import importlib.util
+from http.server import BaseHTTPRequestHandler, HTTPServer
 import os
 import sys
 import tempfile
+import threading
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -35,10 +37,10 @@ class Publishing(unittest.TestCase):
         self.addCleanup(self.verifier.stop)
 
     def test_revisions_keep_history_and_readable_url(self):
-        first = publisher.publish(self.config, self.source, 'jarvis-connections', new=True)
+        first = publisher.publish(self.config, self.source, 'pricing-page-redesign', new=True)
         self.source.write_text('<html>second</html>')
-        second = publisher.publish(self.config, self.source, 'jarvis-connections')
-        task = self.public / 'jarvis-connections'
+        second = publisher.publish(self.config, self.source, 'pricing-page-redesign')
+        task = self.public / 'pricing-page-redesign'
         self.assertEqual((task / 'v1.html').read_text(), '<html>first</html>')
         self.assertEqual((task / 'v2.html').read_bytes(), (task / 'index.html').read_bytes())
         self.assertEqual(first['url'], second['url'])
@@ -99,12 +101,81 @@ class Publishing(unittest.TestCase):
             publisher.publish(self.config, self.source, 'linked')
         self.assertFalse((self.root / 'v1.html').exists())
 
+    def test_latest_write_failures_identify_saved_revision(self):
+        for operation in ['write_temp', 'replace']:
+            with self.subTest(operation=operation):
+                task_name = operation.replace('_', '-')
+                publisher.publish(self.config, self.source, task_name, new=True)
+                self.source.write_text('<html>second</html>')
+                original_write = publisher.write_temp
+                def fail_latest_write(directory, content):
+                    if (directory / 'v2.html').exists():
+                        raise OSError('disk full')
+                    return original_write(directory, content)
+                target = publisher if operation == 'write_temp' else publisher.os
+                failure = fail_latest_write if operation == 'write_temp' else OSError('disk full')
+                with patch.object(target, operation, side_effect=failure):
+                    with self.assertRaisesRegex(ValueError, r'Saved .*v2\.html, but latest page update failed'):
+                        publisher.publish(self.config, self.source, task_name)
+                task = self.public / task_name
+                self.assertEqual((task / 'v2.html').read_text(), '<html>second</html>')
+                self.assertEqual((task / 'index.html').read_text(), '<html>first</html>')
+                self.assertEqual(list(task.glob('.publish-*')), [])
+                self.source.write_text('<html>first</html>')
+
+    def test_invalid_base_url_has_configuration_error(self):
+        for value in [None, 42, [], {}]:
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'base_url; rerun setup'):
+                publisher.publish(dict(self.config, base_url=value), self.source, 'design', new=True)
+        self.assertEqual(list(self.public.iterdir()), [])
+
+    def test_latest_verification_failure_reports_published_content(self):
+        publisher.publish(self.config, self.source, 'design', new=True)
+        self.source.write_text('<html>second</html>')
+        def fail_latest(url, expected):
+            if url.endswith('/design/'):
+                raise OSError('Tailscale unavailable')
+        with patch.object(publisher, 'verify', side_effect=fail_latest):
+            with self.assertRaisesRegex(ValueError, 'Published .*design, but latest URL verification failed'):
+                publisher.publish(self.config, self.source, 'design')
+        self.assertEqual((self.public / 'design/v2.html').read_text(), '<html>second</html>')
+        self.assertEqual((self.public / 'design/index.html').read_bytes(), (self.public / 'design/v2.html').read_bytes())
+
     def test_public_or_redirected_verification_is_rejected(self):
         for base in ['http://mini.example.ts.net', 'https://example.com', 'https://mini.example.ts.net/path']:
             with self.subTest(base=base), self.assertRaises(ValueError):
                 publisher.publish(dict(self.config, base_url=base), self.source, 'design', new=True)
         with self.assertRaisesRegex(ValueError, 'redirected'):
             publisher.NoRedirect().redirect_request(None, None, None, None, None, 'https://example.com')
+
+
+class Verification(unittest.TestCase):
+    def test_real_verifier_does_not_follow_redirects(self):
+        requests = []
+        class Handler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                requests.append(self.path)
+                if self.path == '/redirect':
+                    self.send_response(302)
+                    self.send_header('Location', 'http://localhost:%d/target' % self.server.server_port)
+                else:
+                    self.send_response(200)
+                self.end_headers()
+                self.wfile.write(b'preview')
+
+            def log_message(self, *args):
+                pass
+
+        with HTTPServer(('127.0.0.1', 0), Handler) as server:
+            worker = threading.Thread(target=server.serve_forever, daemon=True)
+            worker.start()
+            try:
+                with self.assertRaisesRegex(ValueError, 'redirected'):
+                    publisher.verify('http://127.0.0.1:%d/redirect' % server.server_port, b'preview')
+                self.assertEqual(requests, ['/redirect'])
+            finally:
+                server.shutdown()
+                worker.join()
 
 
 if __name__ == '__main__':

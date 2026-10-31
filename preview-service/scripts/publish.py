@@ -55,6 +55,8 @@ def publish(config, source, task, new=False):
     root = Path(config["preview_root"])
     if not root.is_absolute() or root.is_symlink() or not root.is_dir():
         raise ValueError("Configured preview directory is unavailable or is a symlink")
+    if not isinstance(config.get("base_url"), str):
+        raise ValueError("Preview service configuration has no valid base_url; rerun setup")
     base = config["base_url"].rstrip("/")
     url = urllib.parse.urlsplit(base)
     if (url.scheme != "https" or not url.hostname or not url.hostname.endswith(".ts.net")
@@ -94,11 +96,15 @@ def publish(config, source, task, new=False):
         except Exception as error:
             raise ValueError("Saved %s, but verification failed; latest was not updated: %s" %
                              (directory / filename, error)) from error
-        temporary = write_temp(directory, content)
         try:
-            os.replace(temporary, directory / "index.html")
-        finally:
-            temporary.unlink(missing_ok=True)
+            temporary = write_temp(directory, content)
+            try:
+                os.replace(temporary, directory / "index.html")
+            finally:
+                temporary.unlink(missing_ok=True)
+        except OSError as error:
+            raise ValueError("Saved %s, but latest page update failed: %s" %
+                             (directory / filename, error)) from error
         latest_url = base + "/" + task + "/"
         try:
             verify(latest_url, content)
