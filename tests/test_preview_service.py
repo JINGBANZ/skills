@@ -123,6 +123,28 @@ class Publishing(unittest.TestCase):
                 self.assertEqual(list(task.glob('.publish-*')), [])
                 self.source.write_text('<html>first</html>')
 
+    def test_symlinked_preview_root_is_rejected_before_writing(self):
+        linked_root = self.root / 'linked-root'
+        linked_root.symlink_to(self.public, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, 'symlink'):
+            publisher.publish(dict(self.config, preview_root=str(linked_root)), self.source, 'design', new=True)
+        self.assertEqual(list(self.public.iterdir()), [])
+        self.assertEqual(self.requests, [])
+
+    def test_revision_link_failure_cleans_up_without_changing_published_content(self):
+        publisher.publish(self.config, self.source, 'design', new=True)
+        self.source.write_text('<html>second</html>')
+        self.requests.clear()
+        with patch.object(publisher.os, 'link', side_effect=OSError('disk full')):
+            with self.assertRaisesRegex(OSError, 'disk full'):
+                publisher.publish(self.config, self.source, 'design')
+        task = self.public / 'design'
+        self.assertEqual((task / 'index.html').read_text(), '<html>first</html>')
+        self.assertEqual((task / 'v1.html').read_text(), '<html>first</html>')
+        self.assertFalse((task / 'v2.html').exists())
+        self.assertEqual(list(task.glob('.publish-*')), [])
+        self.assertEqual(self.requests, [])
+
     def test_invalid_base_url_has_configuration_error(self):
         for value in [None, 42, [], {}]:
             with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'base_url; rerun setup'):
@@ -150,8 +172,9 @@ class Publishing(unittest.TestCase):
 
 
 class Verification(unittest.TestCase):
-    def test_real_verifier_does_not_follow_redirects(self):
-        requests = []
+    def setUp(self):
+        self.requests = []
+        requests = self.requests
         class Handler(BaseHTTPRequestHandler):
             def do_GET(self):
                 requests.append(self.path)
@@ -166,16 +189,24 @@ class Verification(unittest.TestCase):
             def log_message(self, *args):
                 pass
 
-        with HTTPServer(('127.0.0.1', 0), Handler) as server:
-            worker = threading.Thread(target=server.serve_forever, daemon=True)
-            worker.start()
-            try:
-                with self.assertRaisesRegex(ValueError, 'redirected'):
-                    publisher.verify('http://127.0.0.1:%d/redirect' % server.server_port, b'preview')
-                self.assertEqual(requests, ['/redirect'])
-            finally:
-                server.shutdown()
-                worker.join()
+        server = HTTPServer(('127.0.0.1', 0), Handler)
+        self.addCleanup(server.server_close)
+        worker = threading.Thread(target=server.serve_forever, daemon=True)
+        worker.start()
+        self.addCleanup(worker.join)
+        self.addCleanup(server.shutdown)
+        self.base_url = 'http://127.0.0.1:%d' % server.server_port
+
+    def test_real_verifier_does_not_follow_redirects(self):
+        with self.assertRaisesRegex(ValueError, 'redirected'):
+            publisher.verify(self.base_url + '/redirect', b'preview')
+        self.assertEqual(self.requests, ['/redirect'])
+
+    def test_real_verifier_checks_successful_response_body(self):
+        publisher.verify(self.base_url + '/target', b'preview')
+        for expected in [b'changed', b'previe', b'preview!']:
+            with self.subTest(expected=expected), self.assertRaisesRegex(ValueError, 'content verification failed'):
+                publisher.verify(self.base_url + '/target', expected)
 
 
 if __name__ == '__main__':
