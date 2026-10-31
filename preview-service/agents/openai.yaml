@@ -1,0 +1,4 @@
+interface:
+  display_name: "Preview service"
+  short_description: "Publish static HTML through private Tailscale links"
+  default_prompt: "Use $preview-service to publish this HTML preview and return its private browser link."
