@@ -1,0 +1,21 @@
+name: Preview service
+
+on:
+  pull_request:
+    paths: ['preview-service/**', 'tests/test_preview_service.py', '.github/workflows/preview-service.yml']
+  push:
+    branches: [main]
+    paths: ['preview-service/**', 'tests/test_preview_service.py', '.github/workflows/preview-service.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest discover -s tests -v
